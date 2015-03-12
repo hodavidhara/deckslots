@@ -1,0 +1,27 @@
+{
+  "name": "deckslots",
+  "version": "1.0.0",
+  "description": "Additional deckslots for Hearthstone with version control",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hodavidhara/deckslots.git"
+  },
+  "keywords": [
+    "hearthstone",
+    "deckslots"
+  ],
+  "author": "hakuhen@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hodavidhara/deckslots/issues"
+  },
+  "homepage": "https://github.com/hodavidhara/deckslots",
+  "dependencies": {
+    "koa": "^0.18.1",
+    "koa-handlebars": "^0.5.2"
+  }
+}
