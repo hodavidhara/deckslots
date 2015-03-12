@@ -22,6 +22,7 @@
   "homepage": "https://github.com/hodavidhara/deckslots",
   "dependencies": {
     "koa": "^0.18.1",
-    "koa-handlebars": "^0.5.2"
+    "koa-handlebars": "^0.5.2",
+    "koa-router": "^4.2.0"
   }
 }
