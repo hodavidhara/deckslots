@@ -11,6 +11,8 @@ var passport = require('./src/middleware/auth');
 
 // Custom services.
 var UserService = require('./src/UserService');
+var DeckService = require('./src/DeckService');
+var CardService = require('./src/CardService');
 
 var app = koa();
 
@@ -67,6 +69,29 @@ app.get('/account', secure, function *() {
     console.log(this.req.user);
     yield this.render('account', {
         user: this.req.user
+    });
+});
+
+app.get('/deck/:deckId', function *() {
+    var deckVersions = yield DeckService.getAllDeckVersions(this.params.deckId);
+    yield this.render('deck', {
+        deckVersions: deckVersions
+    });
+});
+
+app.get('/deck', body, function *() {
+    var cards = yield CardService.getCollectibleCards();
+    console.log(cards);
+    yield this.render('deckbuilder', {
+        cards: cards
+    });
+});
+
+app.post('/deck', body, function *() {
+    console.log(this.request.body);
+    var deck = yield DeckService.createDeck();
+    yield this.render('deck', {
+        deckVersions: [deck]
     });
 });
 

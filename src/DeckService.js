@@ -68,13 +68,13 @@ DeckService.prototype.updateDeck = function(deck) {
 DeckService.prototype.getAllDeckVersions = function(deckId) {
     var service = this;
     return new Promise(function(resolve, reject) {
-        service.deckCollection.find({"deckId": deckId}, {"sort": "version"}, function(err, result) {
+        service.deckCollection.find({"deckId": deckId}, {"sort": "version"}).toArray(function(err, deckVersions) {
             if(err) {
                 reject(err);
                 return;
             }
 
-            resolve(result);
+            resolve(deckVersions);
         });
     });
 };
