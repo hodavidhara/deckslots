@@ -4,6 +4,7 @@ var handlebars = require('koa-handlebars');
 var router = require('koa-router');
 var body = require('koa-body')();
 var session = require('koa-session');
+var serve = require('koa-static');
 
 var pageNotFound = require('./src/middleware/404');
 var secure = require('./src/middleware/secure');
@@ -21,7 +22,8 @@ app.use(handlebars({
     layoutsDir: 'templates/layouts',
     viewsDir: 'templates/views',
     partialsDir: 'templates/partials',
-    defaultLayout: 'main'
+    defaultLayout: 'main',
+    cache: app.env !== "development"
 }));
 
 // Register session
@@ -35,6 +37,11 @@ app.use(passport.session());
 // Register Router
 // Router registration must go after passport initialization.
 app.use(router(app));
+
+// Register static files.
+// TODO: Write the grunt build and don't include all of this junk.
+app.use(serve('bower_components'));
+app.use(serve('static'));
 
 app.get('/', function *() {
     yield this.render('index', {
@@ -66,32 +73,29 @@ app.post('/login', body, passport.authenticate('local', {
 }));
 
 app.get('/account', secure, function *() {
-    console.log(this.req.user);
     yield this.render('account', {
         user: this.req.user
     });
 });
 
-app.get('/deck/:deckId', function *() {
-    var deckVersions = yield DeckService.getAllDeckVersions(this.params.deckId);
-    yield this.render('deck', {
-        deckVersions: deckVersions
-    });
-});
-
-app.get('/deck', body, function *() {
+app.get('/deck', secure, body, function *() {
     var cards = yield CardService.getCollectibleCards();
-    console.log(cards);
     yield this.render('deckbuilder', {
-        cards: cards
+        cards: JSON.stringify(cards)
     });
 });
 
-app.post('/deck', body, function *() {
-    console.log(this.request.body);
-    var deck = yield DeckService.createDeck();
+app.post('/deck', secure, body, function *() {
+    var deck = this.request.body;
+    deck.user = this.req.user;
+    deck = yield DeckService.createDeck(deck);
+    this.body = deck[0];
+});
+
+app.get('/deck/:deckId', function *() {
+    var deck = yield DeckService.getLatestVersionOfDeck(this.params.deckId);
     yield this.render('deck', {
-        deckVersions: [deck]
+        deck: deck
     });
 });
 

@@ -1,0 +1,14 @@
+<div class="container">
+    <div class="row">
+        <h1>{{deck.deckName}}</h1>
+        <h5>by {{deck.user.username}}</h5>
+    </div>
+    <div class="row">
+        <p>Cards:</p>
+    </div>
+    {{#deck.cards}}
+        <div class="row">
+            <p>{{ this }}</p>
+        </div>
+    {{/deck.cards}}
+</div>

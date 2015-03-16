@@ -1,3 +1,18 @@
-Create A deck!
-
-{{cards}}
+<div class="container">
+    <div class="row">
+        <div class="eight columns">
+            <label for="deckname">Deck Name:</label>
+            <input id="deckname" type="text"/>
+        </div>
+        <div class="four columns">
+            <button class="button-primary" id="createdeck">Create Deck!</button>
+        </div>
+    </div>
+    <div class="row">
+        <label for="cards">Select your cards: </label>
+        <input id="cardselector" type="text"/>
+    </div>
+    <div class="row" id="cardcontainer">
+    </div>
+</div>
+<div class="hidden" data-cards="{{cards}}" id="carddata"></div>
