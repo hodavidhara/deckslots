@@ -2,8 +2,9 @@
   "name": "deckslots",
   "version": "1.0.0",
   "description": "Additional deckslots for Hearthstone with version control",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "node --harmony app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,10 +23,17 @@
   "homepage": "https://github.com/hodavidhara/deckslots",
   "dependencies": {
     "async": "^0.9.0",
+    "co": "^4.4.0",
     "koa": "^0.18.1",
+    "koa-body": "^1.1.0",
     "koa-handlebars": "^0.5.2",
+    "koa-passport": "^1.1.4",
     "koa-router": "^4.2.0",
+    "koa-session": "^3.1.0",
     "lodash": "^3.5.0",
-    "mongodb": "^1.4.34"
+    "mongodb": "^1.4.34",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
+    "shortid": "^2.1.3"
   }
 }
