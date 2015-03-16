@@ -23,7 +23,6 @@
   "homepage": "https://github.com/hodavidhara/deckslots",
   "dependencies": {
     "async": "^0.9.0",
-    "co": "^4.4.0",
     "koa": "^0.18.1",
     "koa-body": "^1.1.0",
     "koa-handlebars": "^0.5.2",
@@ -32,7 +31,6 @@
     "koa-session": "^3.1.0",
     "lodash": "^3.5.0",
     "mongodb": "^1.4.34",
-    "passport": "^0.2.1",
     "passport-local": "^1.0.0",
     "shortid": "^2.1.3"
   }
