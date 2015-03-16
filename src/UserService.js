@@ -72,10 +72,30 @@ UserService.prototype.readByEmail = function(email) {
     })
 };
 
-UserService.prototype.checkPassword = function(email, testPassword) {
+UserService.prototype.readByUsername = function(username) {
     var service = this;
     return new Promise(function(resolve, reject) {
-        service.userCollection.findOne({"email": email}, function(err, user) {
+        service.userCollection.findOne({"username": username}, function(err, result) {
+            if(err){
+                reject(err);
+                return;
+            }
+
+            resolve(cleanResult(result));
+        });
+    })
+};
+
+UserService.prototype.checkPassword = function(emailOrUsername, testPassword) {
+    var service = this;
+    var query = {
+        $or:[
+            {"username":emailOrUsername},
+            {"email":emailOrUsername}
+        ]
+    };
+    return new Promise(function(resolve, reject) {
+        service.userCollection.findOne(query, function(err, user) {
             if(err){
                 reject(err);
                 return;
@@ -100,10 +120,9 @@ UserService.prototype.checkPassword = function(email, testPassword) {
 
 function cleanResult(user) {
     if (!user) return user;
-    var cleanUser = {};
-    cleanUser.email = user.email;
-    cleanUser._id = user._id.toHexString();
-    return cleanUser;
+    user._id = user._id.toHexString();
+    delete user.password;
+    return user;
 }
 
 module.exports = new UserService();

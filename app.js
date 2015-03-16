@@ -46,6 +46,7 @@ app.get('/register', function *() {
 
 app.post('/register', body, function *() {
     var user = {};
+    user.username = this.request.body.username;
     user.email = this.request.body.email;
     user.password = this.request.body.password;
     yield UserService.createUser(user);
