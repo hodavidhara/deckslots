@@ -44,9 +44,7 @@ app.use(serve('bower_components'));
 app.use(serve('static'));
 
 app.get('/', function *() {
-    yield this.render('index', {
-        text: 'Hello, World!'
-    });
+    yield this.render('index');
 });
 
 app.get('/register', function *() {
