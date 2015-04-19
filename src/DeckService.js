@@ -56,12 +56,24 @@ DeckService.prototype.readDeck = function(id) {
 DeckService.prototype.updateDeck = function(deck) {
     var service = this;
     return new Promise(function(resolve, reject) {
-        deck.version = result.version + 1;
-        service.createDeck(deck).then(function(result) {
-            resolve(result);
-        }, function(err) {
-            reject(err);
-        });
+        if (!deck.version) {
+            service.createDeck(deck).then(function(result) {
+                resolve(result);
+            }, function(err) {
+                reject(err);
+            });
+        } else {
+            service.getLatestVersionOfDeck(deck.deckId).then(function(result) {
+                deck.version = result.version + 1;
+                service.deckCollection.insert(deck, function(err, result) {
+                    if(err){
+                        reject(err);
+                        return;
+                    }
+                    resolve(result);
+                });
+            });
+        }
     });
 };
 

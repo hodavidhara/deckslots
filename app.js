@@ -76,7 +76,7 @@ app.get('/account', secure, function *() {
     });
 });
 
-app.get('/deck', secure, body, function *() {
+app.get('/deckbuilder', secure, body, function *() {
     var cards = yield CardService.getCollectibleCards();
     yield this.render('deckbuilder', {
         cards: JSON.stringify(cards)
@@ -86,7 +86,7 @@ app.get('/deck', secure, body, function *() {
 app.post('/deck', secure, body, function *() {
     var deck = this.request.body;
     deck.user = this.req.user;
-    deck = yield DeckService.createDeck(deck);
+    deck = yield DeckService.updateDeck(deck);
     this.body = deck[0];
 });
 
