@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID,
-    properties = require('../resources/properties.json');
+    properties = require('../../resources/properties.json');
 
 var CardService = function() {
     this.mongoUrl = 'mongodb://' + properties.mongo.username + ':' + properties.mongo.password + '@' + properties.mongo.url;

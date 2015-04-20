@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID,
-    properties = require('../resources/properties.json'),
+    properties = require('../../resources/properties.json'),
     bcrypt = require('bcrypt');
 
 var UserService = function() {
