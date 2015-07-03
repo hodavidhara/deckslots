@@ -1,29 +1,10 @@
-var MongoClient = require('mongodb').MongoClient,
-    ObjectID = require('mongodb').ObjectID,
-    properties = require('../../resources/properties.json');
+var MongoCollection = require('./MongoCollection');
 
 var CardService = function() {
-    this.mongoUrl = "";
-    if (properties.mongo.username) {
-        this.mongoUrl = 'mongodb://' + properties.mongo.username + ':' + properties.mongo.password + '@' + properties.mongo.url;
-    } else {
-        this.mongoUrl = 'mongodb://' + properties.mongo.url;
-    }
-    console.log('CardService attempting to connect to ' + this.mongoUrl);
-    var service = this;
-    MongoClient.connect(this.mongoUrl, function(err, db) {
-        if(err) {
-            throw err;
-        }
-
-        console.log('CardService successfully connected.');
-        service.db = db;
-        service.cardCollection = db.collection('cards');
-    });
+    this.cardCollection = new MongoCollection('cards');
 };
 
 CardService.prototype.getCollectibleCards = function() {
-    var service = this;
     var query = {
         "collectible": true,
         "type": {
@@ -31,15 +12,19 @@ CardService.prototype.getCollectibleCards = function() {
         }
     };
     return new Promise(function(resolve, reject) {
-        service.cardCollection.find(query).toArray(function(err, cards) {
-            if(err){
-                reject(err);
-                return;
-            }
+        service.cardCollection.get().then(function (collection) {
+            collection.find(query).toArray(function(err, cards) {
+                if(err){
+                    reject(err);
+                    return;
+                }
 
-            resolve(cards);
+                resolve(cards);
+            });
         });
     });
 };
 
-module.exports = new CardService();
+var service = new CardService();
+
+module.exports = service;

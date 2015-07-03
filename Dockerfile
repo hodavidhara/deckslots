@@ -3,5 +3,6 @@ ADD . /code
 WORKDIR /code
 
 RUN npm install
+RUN npm install -g nodemon
 
-CMD ["npm", "start"]
+CMD ["npm", "run-script", "startd"]
