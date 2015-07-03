@@ -1,3 +1,4 @@
+var fullCardSet = require('./../resources/fullHearthstoneCardSet.json');
 var config = require('konfig')();
 var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
