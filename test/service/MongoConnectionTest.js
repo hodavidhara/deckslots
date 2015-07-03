@@ -3,8 +3,8 @@ var expect = require('chai').expect,
 
 describe('MongoConnection', function() {
     describe('#get()', function(){
-        it('gets a mongo connection', function (done) {
-            expect(MongoConnection.get()).to.eventually.be.ok;
-        })
+        it('gets a mongo connection', function () {
+            return expect(MongoConnection.get()).to.eventually.be.ok
+        });
     });
 });
