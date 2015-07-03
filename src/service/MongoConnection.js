@@ -39,6 +39,7 @@ var _connect = function () {
                 console.log('Failed to connect to Mongo.');
                 connection.db = null;
                 reject(err);
+                return;
             }
 
             console.log('Successfully connected to Mongo.');
