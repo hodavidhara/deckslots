@@ -16,6 +16,9 @@ MongoCollection.prototype.get = function () {
         p = _connectAndGetCollection(this.collectionName).then(function (collection) {
             instance.collection = collection;
             return collection;
+        }).catch(function (error) {
+            instance.collection = null;
+            return Promise.reject(error);
         });
     }
     return p;
@@ -25,7 +28,9 @@ var _connectAndGetCollection = function (collectionName) {
     return new Promise(function (resolve, reject) {
         MongoConnection.get().then(function (db) {
             resolve(db.collection(collectionName));
-        }); //TODO: should we catch here?
+        }).catch(function (err) {
+            reject('Error getting mongo connection', err);
+        });
     });
 };
 
