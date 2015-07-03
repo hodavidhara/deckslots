@@ -36,7 +36,7 @@ function insertCards(db, callback) {
         });
     }, function(err) {
         if (err) {
-            logger.error('error inserting all cards', errr);
+            logger.error('error inserting all cards', err);
         } else {
             logger.info('successfully inserted all');
         }
