@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID,
-    config = require('konfig')();
+    config = require('konfig')(),
+    logger = require('../logger');
 
 /**
  * Sets the appropriate connection url.
@@ -20,10 +21,10 @@ var MongoConnection = function() {
 MongoConnection.prototype.get = function () {
     var p;
     if (connection.db) {
-        console.log('Mongo connection exists, returning connection');
+        logger.info('Mongo connection exists, returning connection');
         p = Promise.resolve(connection.db);
     } else {
-        console.log('Mongo connection DOES NOT exists, attempting to connect');
+        logger.info('Mongo connection DOES NOT exists, attempting to connect');
         p = _connect();
     }
     return p;
@@ -36,13 +37,13 @@ var _connect = function () {
     return new Promise(function (resolve, reject) {
         MongoClient.connect(connection.mongoUrl, function(err, db) {
             if(err) {
-                console.log('Failed to connect to Mongo.');
+                logger.error('Failed to connect to Mongo.');
                 connection.db = null;
                 reject(err);
                 return;
             }
 
-            console.log('Successfully connected to Mongo.');
+            logger.info('Successfully connected to Mongo.');
             connection.db = db;
             resolve(db);
         });

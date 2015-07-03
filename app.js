@@ -3,6 +3,7 @@ var koa = require('koa');
 var handlebars = require('koa-handlebars');
 var session = require('koa-session');
 var serve = require('koa-static');
+var logger = require('./src/logger');
 
 // Routes
 var routes = require('./src/routes');
@@ -44,4 +45,4 @@ routes(app);
 app.use(pageNotFound);
 
 app.listen(3000);
-console.log('listening on port 3000');
+logger.info('listening on port 3000');

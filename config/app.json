@@ -1,0 +1,17 @@
+{
+  "default": {
+    "debugLevel": "error"
+  },
+
+  "development": {
+    "debugLevel": "info"
+  },
+
+  "test": {
+    "debugLevel": "none"
+  },
+
+  "docker": {
+    "debugLevel": "info"
+  }
+}

@@ -1,15 +1,14 @@
 var config = require('konfig')();
-var properties = require('./../resources/properties.json');
 var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
+var logger = require('../src/logger');
 
 function dropCardCollection(db, callback) {
     db.dropCollection('cards', function(err, result) {
         if (err) {
-            console.log('error dropping cards collection, this is probably because the collection does not exist');
-            console.log(err);
+            logger.error('error dropping cards collection, this is probably because the collection does not exist', err);
         } else {
-            console.log('successfully dropped card collection');
+            logger.info('successfully dropped card collection');
         }
         callback(null, result);
     });
@@ -23,52 +22,50 @@ function insertCards(db, callback) {
         async.each(cardSet, function(card, singleCardCallback) {
             card.setName = setName;
             cardCollection.insert(card, function (err) {
-                console.log('inserted ' + card.name);
+                logger.info('inserted ' + card.name);
                 singleCardCallback(err);
             });
         }, function (err) {
             if (err) {
-                console.log('error inserting all cards in set ' + setName);
-                console.log(err);
+                logger.error('error inserting all cards in set ' + setName, err);
             } else {
-                console.log('successfully inserted all cards in set ' + setName);
+                logger.info('successfully inserted all cards in set ' + setName);
             }
             setCallback(err)
         });
     }, function(err) {
         if (err) {
-            console.log('error inserting all cards');
-            console.log(err);
+            logger.error('error inserting all cards', errr);
         } else {
-            console.log('successfully inserted all');
+            logger.info('successfully inserted all');
         }
         callback(err);
     });
 }
 
 var fullMongoUrl = 'mongodb://' + config.mongo.username + ':' + config.mongo.password + '@' + config.mongo.url;
-console.log('attempting to connect to ' + fullMongoUrl);
+logger.info('attempting to connect to ' + fullMongoUrl);
 MongoClient.connect(fullMongoUrl, function (err, db) {
     if(err) throw err;
 
     async.series([
         function(callback) {
-            console.log('dropping card collection');
+            logger.info('dropping card collection');
             dropCardCollection(db, callback);
         }, function(callback) {
-            console.log('beginning to insert cards');
+            logger.info('beginning to insert cards');
             insertCards(db, callback);
         }, function(callback) {
-            console.log('closing database connection');
+            logger.info('closing database connection');
             db.close(function(err) {
                 callback(err);
             });
         }
     ], function(err) {
         if (err) {
-            console.log(err);
+            logger.error(err);
         } else {
-            console.log('success!');
+            logger.info('success!');
         }
     });
 });

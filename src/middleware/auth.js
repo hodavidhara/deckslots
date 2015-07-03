@@ -16,7 +16,6 @@ passport.deserializeUser(function(id, done) {
 
 passport.use(new LocalStrategy(function(username, password, done) {
     UserService.checkPassword(username, password).then(function(result) {
-        console.log(result);
         if(result.match) {
             return done(null, result.user);
         } else {

@@ -1,6 +1,7 @@
 var MongoCollection = require('./MongoCollection'),
     ObjectID = require('mongodb').ObjectID,
-    bcrypt = require('bcrypt');
+    bcrypt = require('bcrypt'),
+    logger = require('../logger');
 
 var UserService = function() {
     this.userCollection = new MongoCollection('users');
@@ -98,7 +99,7 @@ UserService.prototype.checkPassword = function(emailOrUsername, testPassword) {
                 }
 
                 if (!user) {
-                    console.log('no user found!');
+                    logger.info('no user found for %s', emailOrUsername);
                     resolve({match: false});
                     return;
                 }

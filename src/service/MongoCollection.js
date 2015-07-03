@@ -1,4 +1,5 @@
-var MongoConnection = require('./MongoConnection');
+var MongoConnection = require('./MongoConnection'),
+    logger = require('../logger');
 
 var MongoCollection = function(collectionName) {
     this.collectionName = collectionName;
@@ -9,10 +10,10 @@ MongoCollection.prototype.get = function () {
     var p;
     var instance = this;
     if (this.collection) {
-        console.log('Collection ', this.collectionName, ' is cached, returning cached object');
+        logger.info('Collection ', this.collectionName, ' is cached, returning cached object');
         p = Promise.resolve(this.collection);
     } else {
-        console.log('Collection ', this.collectionName, ' is not cached, fetching.');
+        logger.info('Collection ', this.collectionName, ' is not cached, fetching.');
         p = _connectAndGetCollection(this.collectionName).then(function (collection) {
             instance.collection = collection;
             return collection;
