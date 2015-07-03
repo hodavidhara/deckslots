@@ -4,10 +4,7 @@ var expect = require('chai').expect,
 describe('MongoConnection', function() {
     describe('#get()', function(){
         it('gets a mongo connection', function (done) {
-            MongoConnection.get().then(function(db) {
-                expect(db).to.be.ok;
-                done();
-            })
+            expect(MongoConnection.get()).to.eventually.be.ok;
         })
     });
 });

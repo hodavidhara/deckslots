@@ -1,6 +1,5 @@
 var MongoCollection = require('./MongoCollection'),
     ObjectID = require('mongodb').ObjectID,
-    properties = require('../../resources/properties.json'),
     bcrypt = require('bcrypt');
 
 var UserService = function() {

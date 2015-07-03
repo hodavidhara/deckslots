@@ -1,4 +1,4 @@
-var fullCardSet = require('./../resources/fullHearthstoneCardSet.json');
+var config = require('konfig')();
 var properties = require('./../resources/properties.json');
 var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
@@ -46,7 +46,7 @@ function insertCards(db, callback) {
     });
 }
 
-var fullMongoUrl = 'mongodb://' + properties.mongo.username + ':' + properties.mongo.password + '@' + properties.mongo.url;
+var fullMongoUrl = 'mongodb://' + config.mongo.username + ':' + config.mongo.password + '@' + config.mongo.url;
 console.log('attempting to connect to ' + fullMongoUrl);
 MongoClient.connect(fullMongoUrl, function (err, db) {
     if(err) throw err;

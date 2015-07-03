@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient,
     ObjectID = require('mongodb').ObjectID,
-    properties = require('../../resources/properties.json');
+    config = require('konfig')();
 
 /**
  * Sets the appropriate connection url.
@@ -9,10 +9,10 @@ var MongoClient = require('mongodb').MongoClient,
  */
 var MongoConnection = function() {
     this.mongoUrl = "";
-    if (properties.mongo.username) {
-        this.mongoUrl = 'mongodb://' + properties.mongo.username + ':' + properties.mongo.password + '@' + properties.mongo.url;
+    if (config.mongo.username) {
+        this.mongoUrl = 'mongodb://' + config.mongo.username + ':' + config.mongo.password + '@' + config.mongo.url;
     } else {
-        this.mongoUrl = 'mongodb://' + properties.mongo.url;
+        this.mongoUrl = 'mongodb://' + config.mongo.url;
     }
     this.db = null;
 };
