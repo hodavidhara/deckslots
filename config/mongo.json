@@ -1,10 +1,10 @@
 {
   "default": {
-    "url": "mongodb:27017/deckslots"
+    "url": "127.0.0.1:27017/deckslots"
   },
 
   "development": {
-    "url": "mongodb:27017/deckslots"
+    "url": "127.0.0.1:27017/deckslots"
   },
 
   "test": {
