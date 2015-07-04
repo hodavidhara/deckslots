@@ -1,17 +1,13 @@
 {
   "default": {
-    "url": "127.0.0.1:27017/deckslots"
+    "url": "mongodb:27017/deckslots"
   },
 
   "development": {
-    "url": "127.0.0.1:27017/deckslots"
+    "url": "mongodb:27017/deckslots"
   },
 
   "test": {
     "url": "127.0.0.1:27017/deckslots"
-  },
-
-  "docker": {
-    "url": "mongodb:27017/deckslots"
   }
 }

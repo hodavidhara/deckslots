@@ -1,6 +1,6 @@
 {
   "default": {
-    "debugLevel": "error"
+    "debugLevel": "info"
   },
 
   "development": {
@@ -9,9 +9,5 @@
 
   "test": {
     "debugLevel": "none"
-  },
-
-  "docker": {
-    "debugLevel": "info"
   }
 }
