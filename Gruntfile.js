@@ -26,6 +26,11 @@ module.exports = function(grunt) {
                     '<%= libRoot %>/domReady.js': ['bower_components/domReady/domReady.js']
                 }
             },
+            'require-handlebars-plugin': {
+                files: {
+                    '<%= libRoot %>/hbs.js': ['bower_components/require-handlebars-plugin/hbs.js']
+                }
+            },
             jquery: {
                 files: {
                     '<%= libRoot %>/jquery.js': ['bower_components/jquery/dist/jquery.js']
@@ -43,6 +48,11 @@ module.exports = function(grunt) {
                 files: {
                     '<%= libRoot %>/less.js': ['bower_components/less/dist/less.js']
                 }
+            },
+            lodash: {
+                files: {
+                    '<%= libRoot %>/lodash.js': ['bower_components/lodash/lodash.js']
+                }
             }
         },
         copy: {
@@ -59,6 +69,16 @@ module.exports = function(grunt) {
                         cwd: 'bower_components/jquery-ui/',
                         src: ['themes/smoothness/**/*'],
                         dest: '<%= libRoot %>/jquery-ui/'
+                    }
+                ]
+            },
+            'hbs': {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'bower_components/require-handlebars-plugin/hbs',
+                        src: ['**/*'],
+                        dest: '<%= libRoot %>/hbs/'
                     }
                 ]
             }

@@ -1,48 +1,46 @@
-require(['jquery', 'jquery-ui/ui/autocomplete'], function($, autocomplete) {
+"use strict";
+define([
+    'lodash',
+    'jquery',
+    'jquery-ui/ui/autocomplete'
+], function(_, $) {
 
-    // Grab the necessary card data to populate the selector
-    $.getJSON("/card", function(cardData) {
+    var CardSelector = function (conf) {
+        this.domNode = conf.domNode;
+        this.onSelectCallback = conf.onSelect;
+        this.cardSource = [];
 
-        var cardSelector = $("#cardselector");
-        var cardContainer = $("#cardcontainer");
-        var cardSource = [];
-        var selectedCards = [];
-        $.each(cardData, function(index, card) {
-            cardSource.push({
-                label : card.name,
-                value : card.id
-            });
-        });
+        var that = this;
 
-        cardSelector.autocomplete({
-            source: cardSource,
-            focus: function( event, ui ) {
-                $( "#cardselector" ).val( ui.item.label );
-                return false;
-            },
-            select: function( event, ui ) {
-                $( "#cardselector" ).val('');
-                selectedCards.push(ui.item.value);
-                cardContainer.append('<div data-card-id="' + ui.item.value + '">' + ui.item.label + '</div>');
-                return false;
-            }
-        });
-
-        $('#createdeck').click(function() {
-            var data = {
-                deckName: $('#deckname').val(),
-                cards: selectedCards
-            };
-            $.ajax({
-                url: '/deck',
-                method: 'POST',
-                data: JSON.stringify(data),
-                success: function(deck) {
-                    window.location.replace("/deck/" + deck.deckId);
+        this.loadCards(function () {
+            that.domNode.autocomplete({
+                source: that.cardSource,
+                focus: function(event, ui) {
+                    that.domNode.val(ui.item.label);
+                    return false;
                 },
-                contentType: 'application/json',
-                dataType: 'json'
+                select: function(event, ui) {
+                    that.onSelectCallback(event, ui);
+                    that.domNode.val('');
+                    return false;
+                }
             });
+        })
+    };
+
+    CardSelector.prototype.loadCards = function (callback) {
+        var that = this;
+        $.getJSON("/card", function(cardData) {
+            _.forEach(cardData, function(card) {
+                that.cardSource.push({
+                    label : card.name,
+                    value : card.id,
+                    card: card
+                });
+            });
+            callback();
         });
-    });
+    };
+
+    return CardSelector;
 });

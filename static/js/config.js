@@ -3,4 +3,4 @@ var require = {
     paths: {
         deckslots: '/js/deckslots'
     }
-}
+};

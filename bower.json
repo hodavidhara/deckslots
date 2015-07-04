@@ -22,6 +22,8 @@
     "skeleton": "~2.0.4",
     "less": "~2.5.0",
     "requirejs": "~2.1.17",
-    "domReady": "~2.0.1"
+    "domReady": "~2.0.1",
+    "require-handlebars-plugin": "~0.11.3",
+    "lodash": "~3.10.0"
   }
 }
