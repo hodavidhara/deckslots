@@ -7,7 +7,15 @@ define([
 
     var DeckDisplay = function (config) {
         this.domNode = config.domNode;
-        this.decklist = [];
+
+        if (config.decklist) {
+            this.decklist = config.decklist;
+            _.forEach(this.decklist, function (card) {
+                this.domNode.append($(cardTemplate({card: card})));
+            }, this);
+        } else {
+            this.decklist = [];
+        }
     };
 
     DeckDisplay.prototype.addCard = function (card) {

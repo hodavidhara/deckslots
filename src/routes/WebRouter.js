@@ -38,8 +38,11 @@ webRouter.post('/login', body, passport.authenticate('local', {
 }));
 
 webRouter.get('/account', secure, function *() {
+    var user = this.req.user;
+    var decks = yield DeckService.getDecksForUser(user);
     yield this.render('account', {
-        user: this.req.user
+        decks: decks,
+        user: user
     });
 });
 

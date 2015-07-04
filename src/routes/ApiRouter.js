@@ -6,6 +6,7 @@ var secure = require('../middleware/secure');
 
 var CardService = require('../service/CardService');
 var DeckService = require('../service/DeckService');
+var UserService = require('../service/UserService');
 var CardLoader = require('../service/CardLoader');
 
 var apiRouter = router();
@@ -19,6 +20,7 @@ apiRouter.post('/deck', secure, body, function *() {
 
 apiRouter.get('/deck/:deckId', function *() {
     var deck = yield DeckService.getLatestVersionOfDeck(this.params.deckId);
+    deck.user = yield UserService.read(deck.user);
     this.body = JSON.stringify(deck);
 });
 

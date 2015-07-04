@@ -1,10 +1,12 @@
 <div class="container">
     <h1>Welcome, {{user.username}}</h1>
     <div class="row">
-        <div class="six columns"><h2>Decks</h2></div>
-        <div class="six columns">
-            <a class="button button-primary u-pull-right" href="/deckbuilder">New Deck</a>
-        </div>
+        <a class="button button-primary u-pull-right" href="/deckbuilder">New Deck</a>
+        <h2>Decks</h2>
+        {{#decks}}
+            <div class="row">
+                <a href="/deck/{{this.deckId}}"><h3>View</h3></a>
+            </div>
+        {{/decks}}
     </div>
-    <div></div>
 </div>

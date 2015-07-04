@@ -1,4 +1,5 @@
-var MongoCollection = require('./MongoCollection'),
+var _ = require('lodash'),
+    MongoCollection = require('./MongoCollection'),
     ObjectID = require('mongodb').ObjectID,
     shortId = require('shortid');
 
@@ -88,6 +89,28 @@ DeckService.prototype.getLatestVersionOfDeck = function(deckId) {
         }, function(err) {
             reject(err);
         })
+    });
+};
+
+/**
+ * Get all of a given users decks.
+ *
+ * @param {object|string} user either the user object, or the user id as a strong.
+ * @returns {Promise} A promise that will resolve to an array of decks.
+ */
+DeckService.prototype.getDecksForUser = function(user) {
+    var userId = _.isObject(user) ? user._id : user;
+    return new Promise(function (resolve, reject) {
+        service.deckCollection.get().then(function (collection) {
+            collection.find({"user": userId}).toArray(function(err, decks) {
+                if(err) {
+                    reject(err);
+                    return;
+                }
+
+                resolve(decks);
+            });
+        });
     });
 };
 
