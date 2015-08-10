@@ -1,6 +1,8 @@
 "use strict";
 require([
-    'jquery', 'deckslots/cardselector', 'deckslots/deckdisplay'
+    'jquery',
+    'deckslots/cardselector',
+    'deckslots/deckdisplay'
 ], function ($, CardSelector, DeckDisplay) {
 
     var deckDisplay = new DeckDisplay({
@@ -17,14 +19,18 @@ require([
     $('#createdeck').click(function() {
         var data = {
             deckName: $('#deckname').val(),
-            cards: deckDisplay.getIds()
+            versions: [{
+                version: 1,
+                cards: deckDisplay.getIds()
+            }]
         };
         $.ajax({
             url: '/deck',
             method: 'POST',
             data: JSON.stringify(data),
             success: function(deck) {
-                window.location.replace("/deck/" + deck.deckId);
+                console.log(deck);
+                window.location.replace("/deck/" + deck._id);
             },
             contentType: 'application/json',
             dataType: 'json'

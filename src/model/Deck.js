@@ -2,7 +2,7 @@
 var _ = require('lodash'),
     mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    ObjectId = mongoose.ObjectId;
+    ObjectId = mongoose.Schema.ObjectId;
 
 var DeckVersionSchema = new Schema({
     version: Number,

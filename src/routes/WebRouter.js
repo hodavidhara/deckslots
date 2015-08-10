@@ -50,8 +50,8 @@ webRouter.get('/deckbuilder', secure, body, function *() {
     yield this.render('deckbuilder');
 });
 
-webRouter.get('/deck/:deckId', function *() {
-    var deck = yield DeckService.getLatestVersionOfDeck(this.params.deckId);
+webRouter.get('/deck/:id', function *() {
+    var deck = yield DeckService.readDeck(this.params.id);
     var user = yield UserService.read(deck.user);
     yield this.render('deck', {
         deck: deck,

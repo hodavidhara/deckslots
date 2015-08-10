@@ -1,14 +1,12 @@
-var MongoCollection = require('./MongoCollection'),
-    ObjectID = require('mongodb').ObjectID,
+var User = require('../model/User'),
     bcrypt = require('bcrypt'),
     logger = require('../logger');
 
-var UserService = function() {
-    this.userCollection = new MongoCollection('users');
-};
+var UserService = function() {};
 
 UserService.prototype.createUser = function(user) {
     return new Promise(function(resolve, reject) {
+        console.log('generating salt');
         bcrypt.genSalt(10, function(err, salt) {
             if(err) {
                 reject(err);
@@ -21,15 +19,14 @@ UserService.prototype.createUser = function(user) {
                     return;
                 }
                 user.password = hash;
-
-                service.userCollection.get().then(function (collection) {
-                    collection.insert(user, function(err, result) {
-                        if(err){
-                            reject(err);
-                            return;
-                        }
-                        resolve(result);
-                    });
+                new User(user).save(function (err, user) {
+                    if(err){
+                        console.log(err);
+                        reject(err);
+                        return;
+                    }
+                    console.log(user);
+                    resolve(user);
                 });
             });
         });
@@ -38,46 +35,39 @@ UserService.prototype.createUser = function(user) {
 
 UserService.prototype.read = function(id) {
     return new Promise(function(resolve, reject) {
-        var objectId = new ObjectID(id);
-        service.userCollection.get().then(function (collection) {
-            collection.findOne({"_id": objectId}, function(err, result) {
-                if(err){
-                    reject(err);
-                    return;
-                }
+        User.findById(id, function (err, user) {
+            if(err){
+                reject(err);
+                return;
+            }
 
-                resolve(cleanResult(result));
-            });
+            resolve(cleanResult(user));
         });
     });
 };
 
 UserService.prototype.readByEmail = function(email) {
     return new Promise(function(resolve, reject) {
-        service.userCollection.get().then(function (collection) {
-            collection.findOne({"email": email}, function(err, result) {
-                if(err){
-                    reject(err);
-                    return;
-                }
+        User.findOne({"email": email}, function (err, user) {
+            if(err){
+                reject(err);
+                return;
+            }
 
-                resolve(cleanResult(result));
-            });
+            resolve(cleanResult(user));
         });
     })
 };
 
 UserService.prototype.readByUsername = function(username) {
     return new Promise(function(resolve, reject) {
-        service.userCollection.get().then(function (collection) {
-            collection.findOne({"username": username}, function(err, result) {
-                if(err){
-                    reject(err);
-                    return;
-                }
+        User.findOne({"username": username}, function (err, user) {
+            if(err){
+                reject(err);
+                return;
+            }
 
-                resolve(cleanResult(result));
-            });
+            resolve(cleanResult(user));
         });
     })
 };
@@ -91,27 +81,25 @@ UserService.prototype.checkPassword = function(emailOrUsername, testPassword) {
     };
 
     return new Promise(function(resolve, reject) {
-        service.userCollection.get().then(function (collection) {
-            collection.findOne(query, function(err, user) {
+        User.findOne(query, function (err, user) {
+            if(err){
+                reject(err);
+                return;
+            }
+
+            if (!user) {
+                logger.info('no user found for %s', emailOrUsername);
+                resolve({match: false});
+                return;
+            }
+
+            bcrypt.compare(testPassword, user.password, function(err, result) {
                 if(err){
                     reject(err);
                     return;
                 }
-
-                if (!user) {
-                    logger.info('no user found for %s', emailOrUsername);
-                    resolve({match: false});
-                    return;
-                }
-
-                bcrypt.compare(testPassword, user.password, function(err, result) {
-                    if(err){
-                        reject(err);
-                        return;
-                    }
-                    resolve({match: result, user: cleanResult(user)});
-                })
-            });
+                resolve({match: result, user: cleanResult(user)});
+            })
         });
     });
 };

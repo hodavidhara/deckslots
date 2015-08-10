@@ -4,15 +4,22 @@ var handlebars = require('koa-handlebars');
 var session = require('koa-session');
 var serve = require('koa-static');
 var logger = require('./src/logger');
+var mongoose = require('./src/service/MongoConnection');
+
 
 // Routes
 var routes = require('./src/routes');
 
 // Custom middleware.
 var pageNotFound = require('./src/middleware/404');
+var serverError = require('./src/middleware/500');
 var passport = require('./src/middleware/auth');
 
 var app = koa();
+
+// set up 404/500 middleware.
+app.use(pageNotFound);
+app.use(serverError);
 
 // Register handlebars
 app.use(handlebars({
@@ -40,9 +47,6 @@ app.use(serve('static'));
 // Register Router
 // Router registration must go after passport initialization.
 routes(app);
-
-// set up 404 middleware.
-app.use(pageNotFound);
 
 app.listen(3000);
 logger.info('listening on port 3000');
