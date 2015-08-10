@@ -1,6 +1,5 @@
 var _ = require('lodash'),
-    Deck = require('../model/Deck'),
-    shortId = require('shortid');
+    Deck = require('../model/Deck');
 
 var DeckService = function() {
 };
@@ -9,12 +8,10 @@ DeckService.prototype.createDeck = function(deck) {
     return new Promise(function(resolve, reject) {
 
         // If this is a brand new deck add some required fields.
-        console.log(deck);
         if (!deck.versions[0].version) {
             deck.versions[0].version = 1;
         }
 
-        console.log(deck);
         new Deck(deck).save(function (err, deck) {
             if (err) {
                 reject(err);
@@ -27,7 +24,6 @@ DeckService.prototype.createDeck = function(deck) {
 
 DeckService.prototype.readDeck = function(id) {
     return new Promise(function(resolve, reject) {
-        console.log(id);
         Deck.findById(id, function (err, deck) {
             if (err) {
                 reject(err);
