@@ -15,16 +15,16 @@ apiRouter.post('/deck', secure, body, function *() {
     var deck = this.request.body;
     deck.user = this.req.user._id;
     deck = yield DeckService.createDeck(deck);
-    this.body = deck[0];
+    this.body = deck;
 });
 
-apiRouter.get('/deck/:deckId', function *() {
-    var deck = yield DeckService.getLatestVersionOfDeck(this.params.deckId);
+apiRouter.get('/deck/:id', function *() {
+    var deck = yield DeckService.readDeck(this.params.id);
     deck.user = yield UserService.read(deck.user);
     this.body = JSON.stringify(deck);
 });
 
-apiRouter.post('/deck/:deckId', secure, body, function *() {
+apiRouter.post('/deck/:id', secure, body, function *() {
     var deck = this.request.body;
     deck.user = this.req.user._id;
     deck = yield DeckService.updateDeck(deck);

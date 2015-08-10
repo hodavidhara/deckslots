@@ -2,8 +2,9 @@
 define([
     'lodash',
     'jquery',
-    'jquery-ui/ui/autocomplete'
-], function(_, $) {
+    'jquery-ui/ui/autocomplete',
+    'deckslots/cardstore'
+], function(_, $, autocomplete, CardStore) {
 
     var CardSelector = function (conf) {
         this.domNode = conf.domNode;
@@ -30,16 +31,14 @@ define([
 
     CardSelector.prototype.loadCards = function (callback) {
         var that = this;
-        $.getJSON("/card", function(cardData) {
-            _.forEach(cardData, function(card) {
-                that.cardSource.push({
-                    label : card.name,
-                    value : card.id,
-                    card: card
-                });
+        _.forEach(CardStore.cards, function(card) {
+            that.cardSource.push({
+                label : card.name,
+                value : card.id,
+                card: card
             });
-            callback();
         });
+        callback();
     };
 
     return CardSelector;

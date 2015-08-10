@@ -1,4 +1,5 @@
 "use strict";
+var MongoConnection = require('../../src/service/MongoConnection');
 var CardLoader = require('../../src/service/CardLoader');
 
 describe('CardLoader', function() {

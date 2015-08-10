@@ -1,46 +1,35 @@
 var _ = require('lodash'),
-    MongoCollection = require('./MongoCollection'),
-    ObjectID = require('mongodb').ObjectID,
-    shortId = require('shortid');
+    Deck = require('../model/Deck');
 
 var DeckService = function() {
-    this.deckCollection = new MongoCollection('decks');
 };
 
 DeckService.prototype.createDeck = function(deck) {
     return new Promise(function(resolve, reject) {
 
         // If this is a brand new deck add some required fields.
-        if (!deck.deckId) {
-            deck.deckId = shortId.generate();
-            deck.version = 1;
+        if (!deck.versions[0].version) {
+            deck.versions[0].version = 1;
         }
 
-        service.deckCollection.get().then(function (collection) {
-           collection.insert(deck, function(err, result) {
-               if (err) {
-                   reject(err);
-                   return;
-               }
-               resolve(result);
-           });
+        new Deck(deck).save(function (err, deck) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(deck);
         });
     });
 };
 
 DeckService.prototype.readDeck = function(id) {
     return new Promise(function(resolve, reject) {
-        var objectId = new ObjectID(id);
-
-        service.deckCollection.get().then(function (collection) {
-            collection.findOne({"_id": objectId}, function (err, result) {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-
-                resolve(result);
-            });
+        Deck.findById(id, function (err, deck) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(deck);
         });
     });
 };
@@ -51,45 +40,18 @@ DeckService.prototype.updateDeck = function(deck) {
         return service.createDeck(deck);
     } else {
         return new Promise(function(resolve, reject) {
-            service.getLatestVersionOfDeck(deck.deckId).then(function(result) {
+            service.readDeck(deck._id).then(function(result) {
                 deck.version = result.version + 1;
-                service.deckCollection.get().then(function (collection) {
-                    collection.insert(deck, function(err, result) {
-                        if(err){
-                            reject(err);
-                            return;
-                        }
-                        resolve(result);
-                    });
+                deck.save(function (err, deck) {
+                    if(err){
+                        reject(err);
+                        return;
+                    }
+                    resolve(deck);
                 });
             });
         });
     }
-};
-
-DeckService.prototype.getAllDeckVersions = function(deckId) {
-    return new Promise(function(resolve, reject) {
-        service.deckCollection.get().then(function (collection) {
-            collection.find({"deckId": deckId}, {"sort": "version"}).toArray(function(err, deckVersions) {
-                if(err) {
-                    reject(err);
-                    return;
-                }
-
-                resolve(deckVersions);
-            });
-        });
-    });
-};
-
-DeckService.prototype.getLatestVersionOfDeck = function(deckId) {
-    return new Promise(function(resolve, reject) {
-        service.getAllDeckVersions(deckId).then(function(allVersions) {
-            resolve(allVersions[allVersions.length - 1]);
-        }, function(err) {
-            reject(err);
-        })
-    });
 };
 
 /**
@@ -101,15 +63,13 @@ DeckService.prototype.getLatestVersionOfDeck = function(deckId) {
 DeckService.prototype.getDecksForUser = function(user) {
     var userId = _.isObject(user) ? user._id : user;
     return new Promise(function (resolve, reject) {
-        service.deckCollection.get().then(function (collection) {
-            collection.find({"user": userId}).toArray(function(err, decks) {
-                if(err) {
-                    reject(err);
-                    return;
-                }
+        Deck.find({"user": userId}, function (err, decks) {
+            if(err) {
+                reject(err);
+                return;
+            }
 
-                resolve(decks);
-            });
+            resolve(decks);
         });
     });
 };

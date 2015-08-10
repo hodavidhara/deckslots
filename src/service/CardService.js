@@ -1,7 +1,6 @@
-var MongoCollection = require('./MongoCollection');
+var Card = require('../model/Card');
 
 var CardService = function() {
-    this.cardCollection = new MongoCollection('cards');
 };
 
 CardService.prototype.getCollectibleCards = function() {
@@ -12,15 +11,13 @@ CardService.prototype.getCollectibleCards = function() {
         }
     };
     return new Promise(function(resolve, reject) {
-        service.cardCollection.get().then(function (collection) {
-            collection.find(query).toArray(function(err, cards) {
-                if(err){
-                    reject(err);
-                    return;
-                }
+        Card.find(query, function(err, cards) {
+            if (err) {
+                reject(err);
+                return;
+            }
 
-                resolve(cards);
-            });
+            resolve(cards);
         });
     });
 };
