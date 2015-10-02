@@ -1,12 +1,16 @@
 <div class="container">
     <h1>Welcome, {{user.username}}</h1>
-    <div class="row">
-        <a class="button button-primary u-pull-right" href="/deckbuilder">New Deck</a>
-        <h2>Decks</h2>
-        {{#decks}}
-            <div class="row">
-                <a href="/deck/{{this._id}}"><h3>View</h3></a>
-            </div>
-        {{/decks}}
+
+    <div class="row section">
+        <div class="section-header">
+            <a class="button button-primary u-pull-right" href="/deckbuilder">New Deck</a>
+            <h2>Decks</h2></div>
+        <div class="section-body">
+            {{#decks}}
+                <div class="row">
+                    <a href="/deck/{{this._id}}"><h3>{{this.deckName}} (v{{this.versions.length}})</h3></a>
+                </div>
+            {{/decks}}
+        </div>
     </div>
 </div>

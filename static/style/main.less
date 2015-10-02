@@ -1,3 +1,4 @@
+@import "mixins";
 @import "navbar";
 
 // Box sizing
@@ -9,14 +10,24 @@ html {
   box-sizing: inherit;
 }
 
-.container {
-  margin-top: 100px;
+.main {
+  margin-top: 5rem;
 }
 
-.centered {
-  text-align: center;
+.section {
+  .bordered;
+  .rounded;
 }
 
-.hidden {
-  display: none;
+.section-header {
+  padding: 1em;
+  border-bottom: @border-style;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.section-body {
+  padding: 1em;
 }

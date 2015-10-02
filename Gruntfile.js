@@ -38,10 +38,8 @@ module.exports = function(grunt) {
             },
             skeleton: {
                 files: {
-                    '<%= libRoot %>/skeleton.css': [
-                        'bower_components/skeleton/css/normalize.css',
-                        'bower_components/skeleton/css/skeleton.css'
-                    ]
+                    '<%= libRoot %>/skeleton.css': ['bower_components/skeleton/css/skeleton.css'],
+                    '<%= libRoot %>/normalize.css': ['bower_components/skeleton/css/normalize.css']
                 }
             },
             less: {
