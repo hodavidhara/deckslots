@@ -30,6 +30,11 @@ app.use(handlebars({
     cache: app.env !== "development",
     data: {
         dev: app.env === "development"
+    },
+    helpers: {
+        json: function(context) {
+            return JSON.stringify(context);
+        }
     }
 }));
 
@@ -43,6 +48,9 @@ app.use(passport.session());
 
 // Register static files.
 app.use(serve('static'));
+
+// Add variables necessary for all responses.
+app.use(require('./src/middleware/globals'));
 
 // Register Router
 // Router registration must go after passport initialization.

@@ -16,7 +16,7 @@ function *pageNotFound(next){
             this.body = {
                 message: 'Page Not Found'
             };
-            break
+            break;
         default:
             this.type = 'text';
             this.body = 'Page Not Found';

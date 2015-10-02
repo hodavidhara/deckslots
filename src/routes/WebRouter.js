@@ -37,6 +37,11 @@ webRouter.post('/login', body, passport.authenticate('local', {
     failureRedirect: '/login'
 }));
 
+webRouter.get('/logout', function *() {
+    this.logout();
+    this.redirect('/');
+});
+
 webRouter.get('/account', secure, function *() {
     var user = this.req.user;
     var decks = yield DeckService.getDecksForUser(user);
