@@ -17,7 +17,8 @@ var CardSchema = new Schema({
     collectible: Boolean,
     howToGetGold: String,
     mechanics: [String],
-    setName: String
+    setName: String,
+    playerClass: String
 });
 
 module.exports = mongoose.model('Card', CardSchema);

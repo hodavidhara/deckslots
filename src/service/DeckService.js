@@ -11,7 +11,7 @@ DeckService.prototype.createDeck = function(deck) {
         if (!deck.versions[0].version) {
             deck.versions[0].version = 1;
         }
-
+        deck.created = Date.now();
         new Deck(deck).save(function (err, deck) {
             if (err) {
                 reject(err);

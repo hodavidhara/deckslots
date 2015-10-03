@@ -19,6 +19,7 @@ require([
     $('#createdeck').click(function() {
         var data = {
             deckName: $('#deckname').val(),
+            'class': $('#class').val(),
             versions: [{
                 version: 1,
                 cards: deckDisplay.getIds()

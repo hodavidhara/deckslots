@@ -13,6 +13,9 @@ var DeckVersionSchema = new Schema({
 var DeckSchema = new Schema({
     deckName: String,
     user: ObjectId,
+    'class': String,
+    created: Date,
+    updated: { type: Date, default: Date.now },
     versions: [DeckVersionSchema]
 });
 
