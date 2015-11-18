@@ -17,7 +17,7 @@ define([
 
     EditableDeckDisplay.prototype.addCard = function (card) {
         this.decklist.push(card);
-        _.bind(_addCardNode, this);
+        _.bind(_addCardNode, this)(card);
     };
 
     EditableDeckDisplay.prototype.loadDeck = function (deck) {
