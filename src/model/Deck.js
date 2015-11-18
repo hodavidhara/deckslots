@@ -24,5 +24,3 @@ DeckSchema.methods.version = function(versionNumber) {
 };
 
 module.exports = mongoose.model('Deck', DeckSchema);
-
-

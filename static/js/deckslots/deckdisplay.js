@@ -9,28 +9,17 @@ define([
         this.domNode = config.domNode;
 
         if (config.decklist) {
-            this.decklist = config.decklist;
-            _.forEach(this.decklist, function (card) {
-                this.domNode.append($(cardTemplate({card: card})));
-            }, this);
+            this.loadDeck(config.decklist);
         } else {
             this.decklist = [];
         }
     };
 
-    DeckDisplay.prototype.addCard = function (card) {
-        this.decklist.push(card);
-        this.domNode.append($(cardTemplate({card: card})));
-    };
-
-    DeckDisplay.prototype.removeCard = function (card) {
-        var index = _.findIndex(this.decklist, card);
-        if (index > -1) {
-            _.pullAt(this.decklist, index);
-            this.domNode.remove('div[data-card-id="' + card.id + '"]');
-        } else {
-            throw Error('Card does not exist in decklist');
-        }
+    DeckDisplay.prototype.loadDeck = function (deck) {
+        this.decklist = deck;
+        _.forEach(this.decklist, function (card) {
+            this.domNode.append($(cardTemplate({card: card})));
+        }, this);
     };
 
     DeckDisplay.prototype.getCards = function () {

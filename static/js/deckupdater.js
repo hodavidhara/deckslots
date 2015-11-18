@@ -1,9 +1,14 @@
 "use strict";
 require([
     'jquery',
+    'deckslots/deckservice',
     'deckslots/cardselector',
     'deckslots/editabledeckdisplay'
-], function ($, CardSelector, EditableDeckDisplay) {
+], function ($, DeckService, CardSelector, EditableDeckDisplay) {
+
+    // Grab the id from the path which looks like /deck/:id
+    var parts = window.location.pathname.split("/");
+    var deckId = parts[2];
 
     var deckDisplay = new EditableDeckDisplay({
         domNode: $('#deckdisplay')
@@ -16,17 +21,17 @@ require([
         }
     });
 
-    $('#createdeck').click(function() {
+    DeckService.getLatestDeckVersion(deckId, function (deck) {
+        deckDisplay.loadDeck(deck);
+    });
+
+    $('#updatedeck').click(function() {
         var data = {
-            deckName: $('#deckname').val(),
-            'class': $('#class').val(),
-            versions: [{
-                version: 1,
-                cards: deckDisplay.getIds()
-            }]
+            cards: deckDisplay.getIds(),
+            comment: ''
         };
         $.ajax({
-            url: '/deck',
+            url: '/deck/' + deckId + '/v',
             method: 'POST',
             data: JSON.stringify(data),
             success: function(deck) {

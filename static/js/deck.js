@@ -2,30 +2,24 @@
 require([
     'lodash',
     'jquery',
-    'deckslots/deckdisplay',
-    'deckslots/cardstore'
-], function (_, $, DeckDisplay, CardStore) {
+    'deckslots/deckservice',
+    'deckslots/deckdisplay'
+], function (_, $, DeckService, DeckDisplay) {
 
     // Grab the id from the path which looks like /deck/:id/:version
     var parts = window.location.pathname.split("/");
     var deckId = parts[2];
-    var deckVersion = parts[3];
+    var deckVersion = _.parseInt(parts[3]);
 
-    $.getJSON('/deck/' + deckId, function(deck) {
+    var getDeckVersion = deckVersion ?
+        DeckService.getDeckVersion.bind(this, deckId, deckVersion) :
+        DeckService.getLatestDeckVersion.bind(this, deckId);
 
-        // If no version was passed in, just use the latest.
-        var cardIds;
-        if (deckVersion) {
-            cardIds = _.find(deck.versions, {version: deckVersion});
-        } else {
-            cardIds = _.sortBy(deck.versions, 'version')[0].cards;
-        }
-
-        var decklist = CardStore.getCards(cardIds);
+    getDeckVersion(function(deckVersion) {
 
         var deckDisplay = new DeckDisplay({
             domNode: $('#deckdisplay'),
-            decklist: decklist
+            decklist: deckVersion
         });
     });
 });

@@ -1,11 +1,11 @@
 <div class="container">
     <div class="row">
-        <h1>{{deck.deckName}}</h1>
+        <h1>{{deck.deckName}} (v{{version}})</h1>
         <h4>by {{user.username}}</h4>
     </div>
     <div class="row">
         <p>Cards:</p>
     </div>
     <div id="deckdisplay"></div>
+    <a class="button button-primary" href="/deckbuilder/{{deck._id}}">Update Deck</a>
 </div>
-{{> deckscripts}}

@@ -54,6 +54,23 @@ DeckService.prototype.updateDeck = function(deck) {
     }
 };
 
+DeckService.prototype.addVersion = function(id, deckVersion) {
+
+    return new Promise(function(resolve, reject) {
+        service.readDeck(id).then(function(deck) {
+            deckVersion.version = deck.versions.length + 1;
+            deck.versions.push(deckVersion);
+            deck.save(function (err, deck) {
+                if(err){
+                    reject(err);
+                    return;
+                }
+                resolve(deck);
+            });
+        });
+    });
+};
+
 /**
  * Get all of a given users decks.
  *

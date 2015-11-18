@@ -55,11 +55,31 @@ webRouter.get('/deckbuilder', secure, body, function *() {
     yield this.render('deckbuilder');
 });
 
+webRouter.get('/deckbuilder/:id', secure, body, function *() {
+    var deck = yield DeckService.readDeck(this.params.id);
+    var user = yield UserService.read(deck.user);
+    yield this.render('deckupdater', {
+        deck: deck,
+        user: user
+    });
+});
+
 webRouter.get('/deck/:id', function *() {
     var deck = yield DeckService.readDeck(this.params.id);
     var user = yield UserService.read(deck.user);
     yield this.render('deck', {
         deck: deck,
+        version: deck.versions.length,
+        user: user
+    });
+});
+
+webRouter.get('/deck/:id/:version', function *() {
+    var deck = yield DeckService.readDeck(this.params.id);
+    var user = yield UserService.read(deck.user);
+    yield this.render('deck', {
+        deck: deck,
+        version: this.params.version,
         user: user
     });
 });

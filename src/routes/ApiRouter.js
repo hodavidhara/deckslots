@@ -11,6 +11,7 @@ var CardLoader = require('../service/CardLoader');
 
 var apiRouter = router();
 
+// Create a brand new deck
 apiRouter.post('/deck', secure, body, function *() {
     var deck = this.request.body;
     deck.user = this.req.user._id;
@@ -18,17 +19,31 @@ apiRouter.post('/deck', secure, body, function *() {
     this.body = deck;
 });
 
+// Get a deck and all versions.
 apiRouter.get('/deck/:id', function *() {
     var deck = yield DeckService.readDeck(this.params.id);
     deck.user = yield UserService.read(deck.user);
     this.body = JSON.stringify(deck);
 });
 
+// Update a deck, or create a deck with a specific id.
 apiRouter.post('/deck/:id', secure, body, function *() {
     var deck = this.request.body;
     deck.user = this.req.user._id;
     deck = yield DeckService.updateDeck(deck);
-    this.body = deck[0];
+    this.body = deck;
+});
+
+// Get a single deck version.
+apiRouter.get('/deck/:id/v/:version', function *() {
+    var deck = yield DeckService.readDeck(this.params.id);
+    this.body = JSON.stringify(deck.version(this.params.version));
+});
+
+// Add a new version to a deck
+apiRouter.post('/deck/:id/v', secure, body, function *() {
+    var deck = yield DeckService.addVersion(this.params.id, this.request.body);
+    this.body = deck;
 });
 
 apiRouter.get('/card', function *() {
